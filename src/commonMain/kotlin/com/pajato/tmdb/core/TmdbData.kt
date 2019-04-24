@@ -1,16 +1,7 @@
-# argus-tmdb-core
+package com.pajato.tmdb.core
 
-![TMDB PoweredBy Logo](images/powered-by-tmdb.png)
-
-## Overview
-
-A multi-platform Kotlin library providing access to The Movie Database (tmdb) dataset objects.
-
-Support will be provided in the first release for Android and iOS.
-
-## API
-
-```kotlin
+import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 /** The wrapper class for TMDB dataset subclasses. */
 sealed class TmdbData
@@ -22,8 +13,7 @@ interface TmdbDataFactory {
 }
 
 /** The set of collections used in TMDB. */
-@Serializable
-data class Collection(val id: Int = 0, val name: String = "") : TmdbData() {
+@Serializable data class Collection(val id: Int = 0, val name: String = "") : TmdbData() {
     companion object : TmdbDataFactory {
         override val listName = "collection_ids"
         override fun create(json: String): TmdbData = createFromJson(json, Collection())
@@ -31,8 +21,7 @@ data class Collection(val id: Int = 0, val name: String = "") : TmdbData() {
 }
 
 /** The set of keywords used in TMDB. */
-@Serializable
-data class Keyword(val id: Int = 0, val name: String = "") : TmdbData() {
+@Serializable data class Keyword(val id: Int = 0, val name: String = "") : TmdbData() {
     companion object : TmdbDataFactory {
         override val listName = "keyword_ids"
         override fun create(json: String): TmdbData = createFromJson(json, Keyword())
@@ -40,8 +29,7 @@ data class Keyword(val id: Int = 0, val name: String = "") : TmdbData() {
 }
 
 /** The set of movies known to TMDB. */
-@Serializable
-data class Movie(
+@Serializable data class Movie(
     val adult: Boolean = false,
     val id: Int = -1,
     val original_title: String = "",
@@ -55,8 +43,7 @@ data class Movie(
 }
 
 /** The set of TV networks known to TMDB. */
-@Serializable
-data class Network(val id: Int = -1, val name: String = ""): TmdbData() {
+@Serializable data class Network(val id: Int = -1, val name: String = ""): TmdbData() {
     companion object : TmdbDataFactory {
         override val listName = "tv_network_ids"
         override fun create(json: String): TmdbData = createFromJson(json, Network())
@@ -64,8 +51,7 @@ data class Network(val id: Int = -1, val name: String = ""): TmdbData() {
 }
 
 /** The set of people (cast, crew, etc.) known to TMDB. */
-@Serializable
-data class Person(
+@Serializable data class Person(
     val adult: Boolean = false,
     val id: Int = -1,
     val name: String = "",
@@ -78,8 +64,7 @@ data class Person(
 }
 
 /** The set of production companies known to TMDB. */
-@Serializable
-data class ProductionCompany(val id: Int = 0, val name: String = "") : TmdbData() {
+@Serializable data class ProductionCompany(val id: Int = 0, val name: String = "") : TmdbData() {
     companion object : TmdbDataFactory {
         override val listName = "production_company_ids"
         override fun create(json: String): TmdbData = createFromJson(json, ProductionCompany())
@@ -112,4 +97,3 @@ class Page<T1 : TmdbData, T2: TmdbData>(val type: KClass<T1>, val pageSize: Int,
         return if (list.size == 0) "" else getErrorMessage(list[0])
     }
 }
-```
