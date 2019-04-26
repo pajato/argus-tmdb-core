@@ -84,7 +84,7 @@ data class TvSeries(val id: Int = -1, val original_name: String = "", val popula
 data class TmdbError(val message: String) : TmdbData()
 
 /** The page wrapper class. */
-class Page<T : TmdbData> (val listName: String, val pageSize: Int, val list: List<T>) {
+class Page<T1 : TmdbData, out T2 : TmdbData> (val type: KClass<T1>, val pageSize: Int, val list: List<T2>) {
 
     fun hasError(): Boolean = list.size == 1 && list[0] is TmdbError
 
