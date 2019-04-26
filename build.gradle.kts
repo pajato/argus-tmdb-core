@@ -1,11 +1,11 @@
 plugins {
-    kotlin("multiplatform") version "1.3.30"
-    id("kotlinx-serialization") version "1.3.30"
+    kotlin("multiplatform") version "1.3.31"
+    id("kotlinx-serialization") version "1.3.31"
     `maven-publish`
 }
 
 group = "com.pajato"
-version = "0.0.1"
+version = "0.0.3"
 
 repositories {
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
