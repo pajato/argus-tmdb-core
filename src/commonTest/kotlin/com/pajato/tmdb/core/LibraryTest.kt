@@ -109,24 +109,24 @@ class LibraryTest {
     }
 
     @Test fun `when a page object is created verify the properties`() {
-        val type = Collection::class
+        val listName = Collection.listName
         val pageSize = 25
-        val list = mutableListOf<Collection>()
-        val uut = Page(type, pageSize, list)
-        assertEquals(type, uut.type, "Wrong type!")
+        val list = listOf<Collection>()
+        val uut = Page(listName, pageSize, list)
+        assertEquals(listName, uut.listName, "Wrong type!")
         assertEquals(pageSize, uut.pageSize, "Wrong page size!")
         assertEquals(list, uut.list, "Wrong list!")
     }
 
     @Test fun `when a page list has an error verify hasError and getError generate correct results`() {
         val errorMessage = "some error message"
-        val uut = Page(Movie::class, 25, mutableListOf(TmdbError(errorMessage)))
+        val uut = Page(Movie.listName, 25, listOf(TmdbError(errorMessage)))
         assertTrue(uut.hasError(), "No error is indicated!")
         assertEquals(errorMessage, uut.getError(), "Wrong error message!")
     }
 
     @Test fun `when a page list has no error verify hasError and getError generate correct results`() {
-        val uut = Page(Network::class, 25, mutableListOf(Network()))
+        val uut = Page(Network.listName, 25, listOf(Network()))
         assertFalse(uut.hasError(), "An error is indicated!")
         assertEquals("", uut.getError(), "Wrong error message!")
     }
