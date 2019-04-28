@@ -97,3 +97,6 @@ class Page<T1 : TmdbData, out T2 : TmdbData> (val type: KClass<T1>, val pageSize
         return if (list.size == 0) "" else getErrorMessage(list[0])
     }
 }
+
+/** Provide an extension that maps a JSON string to a TmdbData item. */
+fun String.toTmdbData(listName: String): TmdbData = parse(listName, this)
