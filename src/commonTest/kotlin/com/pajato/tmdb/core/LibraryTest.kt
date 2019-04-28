@@ -3,7 +3,12 @@
  */
 package com.pajato.tmdb.core
 
-import kotlin.test.*
+import kotlin.reflect.KClass
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class LibraryTest {
     private fun testTmdbData(name: String) {
@@ -27,7 +32,8 @@ class LibraryTest {
         assertTrue(item is TmdbError, "A non-blank input did not generate an error!")
     }
 
-    @Test fun `when the TMDB network data is accessed the count is greater than 0`() {
+    @Test
+    fun `when the TMDB network data is accessed the count is greater than 0`() {
         testTmdbData("Network")
     }
 
@@ -99,13 +105,29 @@ class LibraryTest {
     }
 
     @Test fun `exercise the parser for each TmdbData subclass`() {
-        parse(Collection.listName, """{"id":645,"name":"James Bond Collection"}""")
-        parse(Keyword.listName, """{"id":730,"name":"factory worker"}""")
-        parse(Movie.listName, """{"adult":false,"id":603,"original_title":"The Matrix","popularity":32.156,"video":false}""")
-        parse(Person.listName, """{"adult":false,"id":658,"name":"Alfred Molina","popularity":4.154}""")
-        parse(ProductionCompany.listName, """{"id":601,"name":"Blake Edwards Entertainment"}""")
-        parse(Network.listName, """{"id":601,"name":"ABC News"}""")
-        parse(TvSeries.listName, """{"id":602,"original_name":"Love on a Rooftop","popularity":1.133}""")
+        fun <T : TmdbData> testParse(type: KClass<T>, json: String) {
+            val listName = type.getListName()
+            val actual = json.toTmdbData(listName)
+            val errorMessage = "Wrong type computed!"
+            when (listName) {
+                Collection.listName -> assertTrue(actual is Collection, errorMessage)
+                Keyword.listName -> assertTrue(actual is Keyword, errorMessage)
+                Movie.listName -> assertTrue(actual is Movie, errorMessage)
+                Person.listName -> assertTrue(actual is Person, errorMessage)
+                ProductionCompany.listName -> assertTrue(actual is ProductionCompany, errorMessage)
+                Network.listName -> assertTrue(actual is Network, errorMessage)
+                TvSeries.listName -> assertTrue(actual is TvSeries, errorMessage)
+                else -> fail("Invalid list name!")
+            }
+        }
+
+        testParse(Collection::class, """{"id":645,"name":"James Bond Collection"}""")
+        testParse(Keyword::class, """{"id":730,"name":"factory worker"}""")
+        testParse(Movie::class, """{"adult":true,"id":6,"original_title":"Maix","popularity":3.1,"video":true}""")
+        testParse(Person::class, """{"adult":false,"id":658,"name":"Alfred Molina","popularity":4.154}""")
+        testParse(ProductionCompany::class, """{"id":601,"name":"Blake Edwards Entertainment"}""")
+        testParse(Network::class, """{"id":601,"name":"ABC News"}""")
+        testParse(TvSeries::class, """{"id":602,"original_name":"Love on a Rooftop","popularity":1.133}""")
     }
 
     @Test fun `when a page object is created verify the properties`() {
@@ -129,5 +151,22 @@ class LibraryTest {
         val uut = Page(Network::class, 25, listOf(Network()))
         assertFalse(uut.hasError(), "An error is indicated!")
         assertEquals("", uut.getError(), "Wrong error message!")
+    }
+
+    @Test fun `when each TmdbData subclass is used to obtain a list name verify that it is correct`() {
+        TmdbData::class.sealedSubclasses.forEach {
+            val uut = it.getListName()
+            val errorMessage = "Wrong list!"
+            when (it) {
+                Collection::class -> assertEquals(Collection.listName, uut, errorMessage)
+                Keyword::class -> assertEquals(Keyword.listName, uut, errorMessage)
+                Movie::class -> assertEquals(Movie.listName, uut, errorMessage)
+                Network::class -> assertEquals(Network.listName, uut, errorMessage)
+                Person::class -> assertEquals(Person.listName, uut, errorMessage)
+                ProductionCompany::class -> assertEquals(ProductionCompany.listName, uut, errorMessage)
+                TvSeries::class -> assertEquals(TvSeries.listName, uut, errorMessage)
+                TmdbError::class -> assertTrue(true)
+            }
+        }
     }
 }

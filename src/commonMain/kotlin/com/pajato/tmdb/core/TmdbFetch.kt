@@ -1,6 +1,7 @@
 package com.pajato.tmdb.core
 
 import kotlinx.serialization.json.Json
+import kotlin.reflect.KClass
 
 internal const val tmdbBlankErrorMessage = "Blank JSON argument encountered."
 
@@ -41,3 +42,21 @@ internal fun createFromJson(json: String, item: TmdbData): TmdbData =
         is TvSeries -> Json.parse(TvSeries.serializer(), json)
         is TmdbError -> item
     }
+
+/** An extension to access the list name given a TmdbData item. */
+internal fun TmdbData.getListName(): String = when (this) {
+    is Collection -> Collection.listName
+    is Keyword -> Keyword.listName
+    is Movie -> Movie.listName
+    is Network -> Network.listName
+    is Person -> Person.listName
+    is ProductionCompany -> ProductionCompany.listName
+    is TvSeries -> TvSeries.listName
+    is TmdbError -> ""
+}
+
+/** An extensions to return a TMDB export data set list name for a given TmdbData subclass. */
+fun KClass<out TmdbData>.getListName(): String {
+    val name = this.simpleName ?: return ""
+    return createDefaultFromType(name).getListName()
+}

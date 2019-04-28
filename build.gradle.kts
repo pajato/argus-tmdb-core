@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.pajato"
-version = "0.0.4"
+version = "0.0.7"
 
 repositories {
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
@@ -22,6 +22,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0")
+                implementation("org.jetbrains.kotlin:kotlin-reflect")
             }
         }
         commonTest {
