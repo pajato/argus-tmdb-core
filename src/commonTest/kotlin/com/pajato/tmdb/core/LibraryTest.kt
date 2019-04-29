@@ -6,7 +6,6 @@ package com.pajato.tmdb.core
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -128,29 +127,6 @@ class LibraryTest {
         testParse(ProductionCompany::class, """{"id":601,"name":"Blake Edwards Entertainment"}""")
         testParse(Network::class, """{"id":601,"name":"ABC News"}""")
         testParse(TvSeries::class, """{"id":602,"original_name":"Love on a Rooftop","popularity":1.133}""")
-    }
-
-    @Test fun `when a page object is created verify the properties`() {
-        val type = Collection::class
-        val pageSize = 25
-        val list = listOf<Collection>()
-        val uut = Page(type, pageSize, list)
-        assertEquals(type, uut.type, "Wrong type!")
-        assertEquals(pageSize, uut.pageSize, "Wrong page size!")
-        assertEquals(list, uut.list, "Wrong list!")
-    }
-
-    @Test fun `when a page list has an error verify hasError and getError generate correct results`() {
-        val errorMessage = "some error message"
-        val uut = Page(Movie::class, 25, listOf(TmdbError(errorMessage)))
-        assertTrue(uut.hasError(), "No error is indicated!")
-        assertEquals(errorMessage, uut.getError(), "Wrong error message!")
-    }
-
-    @Test fun `when a page list has no error verify hasError and getError generate correct results`() {
-        val uut = Page(Network::class, 25, listOf(Network()))
-        assertFalse(uut.hasError(), "An error is indicated!")
-        assertEquals("", uut.getError(), "Wrong error message!")
     }
 
     @Test fun `when each TmdbData subclass is used to obtain a list name verify that it is correct`() {

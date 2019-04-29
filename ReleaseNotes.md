@@ -7,3 +7,5 @@ Version 0.0.3 updates the Kotlin version.
 Version 0.0.4 reverts to using a KClass TmdbData subclass rather than the list name to identify the list.
 
 Version 0.0.7 makes the parse() method public; exposes the extension functions KClass.getListName() and String.toTmdbData().
+
+Version 0.0.8 moves the Page class (and tests) to the argus-tmdb-client project and adds Jacoco code coverage to the build.

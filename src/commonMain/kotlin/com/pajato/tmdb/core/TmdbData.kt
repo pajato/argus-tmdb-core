@@ -1,7 +1,6 @@
 package com.pajato.tmdb.core
 
 import kotlinx.serialization.Serializable
-import kotlin.reflect.KClass
 
 /** The wrapper class for TMDB dataset subclasses. */
 sealed class TmdbData
@@ -13,7 +12,11 @@ interface TmdbDataFactory {
 }
 
 /** The set of collections used in TMDB. */
-@Serializable data class Collection(val id: Int = 0, val name: String = "") : TmdbData() {
+@Serializable
+data class Collection(
+    val id: Int = 0,
+    val name: String = ""
+) : TmdbData() {
     companion object : TmdbDataFactory {
         override val listName = "collection_ids"
         override fun create(json: String): TmdbData = createFromJson(json, Collection())
@@ -82,21 +85,6 @@ data class TvSeries(val id: Int = -1, val original_name: String = "", val popula
 
 /** A special TMDB error class providing granular message data for errors. */
 data class TmdbError(val message: String) : TmdbData()
-
-/** The page wrapper class. */
-class Page<T1 : TmdbData, out T2 : TmdbData> (val type: KClass<T1>, val pageSize: Int, val list: List<T2>) {
-
-    fun hasError(): Boolean = list.size == 1 && list[0] is TmdbError
-
-    fun getError(): String {
-        fun getErrorMessage(item: TmdbData): String = when (item) {
-            is TmdbError -> item.message
-            else -> ""
-        }
-
-        return if (list.size == 0) "" else getErrorMessage(list[0])
-    }
-}
 
 /** Provide an extension that maps a JSON string to a TmdbData item. */
 fun String.toTmdbData(listName: String): TmdbData = parse(listName, this)
