@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.pajato"
-version = "0.0.7"
+version = "0.0.8"
 
 repositories {
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
