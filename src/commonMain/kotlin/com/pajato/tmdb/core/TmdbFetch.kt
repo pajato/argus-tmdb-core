@@ -1,6 +1,8 @@
 package com.pajato.tmdb.core
 
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonException
 import kotlin.reflect.KClass
 
 internal const val tmdbBlankErrorMessage = "Blank JSON argument encountered."
@@ -33,15 +35,17 @@ internal fun createDefaultFromType(type: String): TmdbData = when (type) {
 /** Return a TMDB subclass for a given TMDB default data item and a JSON spec. */
 internal fun createFromJson(json: String, item: TmdbData): TmdbData =
     if (json.isBlank()) TmdbError(tmdbBlankErrorMessage) else when (item) {
-        is Collection -> Json.parse(Collection.serializer(), json)
-        is Keyword -> Json.parse(Keyword.serializer(), json)
-        is Network -> Json.parse(Network.serializer(), json)
-        is ProductionCompany -> Json.parse(ProductionCompany.serializer(), json)
-        is Movie -> Json.parse(Movie.serializer(), json)
-        is Person -> Json.parse(Person.serializer(), json)
-        is TvSeries -> Json.parse(TvSeries.serializer(), json)
+        is Collection -> json.parse(Collection.serializer())
+        is Keyword -> json.parse(Keyword.serializer())
+        is Network -> json.parse(Network.serializer())
+        is ProductionCompany -> json.parse(ProductionCompany.serializer())
+        is Movie -> json.parse(Movie.serializer())
+        is Person -> json.parse(Person.serializer())
+        is TvSeries -> json.parse(TvSeries.serializer())
         is TmdbError -> item
     }
+
+// Extension functions.
 
 /** An extension to access the list name given a TmdbData item. */
 internal fun TmdbData.getListName(): String = when (this) {
@@ -60,3 +64,7 @@ fun KClass<out TmdbData>.getListName(): String {
     val name = this.simpleName ?: return ""
     return createDefaultFromType(name).getListName()
 }
+
+/** Parse the string receiver returning the TmdbError wrapped string on a parsing error. */
+internal fun <T : TmdbData> String.parse(deserializer: DeserializationStrategy<T>): TmdbData =
+        try { Json.parse(deserializer, this) } catch (exc: JsonException) { TmdbError(this) }
