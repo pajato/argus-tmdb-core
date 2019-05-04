@@ -145,4 +145,11 @@ class LibraryTest {
             }
         }
     }
+
+    @Test fun `when invalid JSON data is parsed verify that a TmdbError is generated`() {
+        val notJson = "j;lakfjal;al;fja;ljf;a;jal;jal;kj;a"
+        val uut = notJson.parse(Movie.serializer())
+        assertTrue(uut is TmdbError, "Bad JSON was parsed without error!")
+        assertEquals(notJson, uut.message, "Invalid text after parse!")
+    }
 }
