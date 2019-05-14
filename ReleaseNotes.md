@@ -1,3 +1,5 @@
+Version 0.0.10 moves to a Gradle multi-project format, adopting the buildSrc concept.
+
 Version 0.0.9 handles parsing invalid JSON strings to a TmdbError object.
 
 Version 0.0.8 moves the Page class (and tests) to the argus-tmdb-client project and adds Jacoco code coverage to the build.
