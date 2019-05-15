@@ -7,10 +7,10 @@ plugins {
 }
 
 group = Publish.group
-version = Library.version
+version = Versions.argus
 
 fun isReleaseBuild(): Boolean {
-   return !Library.version.contains("SNAPSHOT")
+   return !Versions.argus.contains("SNAPSHOT")
 }
 
 val releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
@@ -18,11 +18,11 @@ val snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snaps
 val repositoryUsername = "${project.property("SONATYPE_NEXUS_USERNAME")}"
 val repositoryPassword = "${project.property("SONATYPE_NEXUS_PASSWORD")}"
 
-tasks.register<Jar>("emptySourcesJar") { classifier = "sources" }
+tasks.register<Jar>("emptySourcesJar") { archiveClassifier.set("sources") }
 
-tasks.register<Jar>("emptyJavadocJar") { classifier = "javadoc" }
+tasks.register<Jar>("emptyJavadocJar") { archiveClassifier.set("javadoc") }
 
-publishing {
+/* publishing {
    repositories {
       maven {
          url  = uri( if (isReleaseBuild()) releaseRepositoryUrl else snapshotRepositoryUrl )
@@ -36,5 +36,4 @@ publishing {
          url  = uri("file://${rootProject.buildDir}/localMaven")
       }
    }
-
-}
+} */

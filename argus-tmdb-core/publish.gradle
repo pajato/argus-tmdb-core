@@ -88,7 +88,7 @@ publishing {
     }
     maven {
       name = 'test'
-      url "file://${rootProject.buildDir}/localMaven"
+      url "file://${rootProject.project("argus-tmdb-core").buildDir}/arguslocalMaven"
     }
   }
 }
