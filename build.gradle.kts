@@ -1,19 +1,16 @@
 // SDPX-License-Identifier: LGPL-3.0
 
 plugins {
-    kotlin("multiplatform") version Kotlin.version apply false
-    id("kotlinx-serialization") version Kotlin.version apply false
-    id("com.jfrog.bintray") version Bintray.version apply false
-    jacoco
+    kotlin("multiplatform") version Versions.kotlin apply false
+    id("kotlinx-serialization") version Versions.kotlin apply false
 }
 
 allprojects {
     repositories {
-        if (Kotlin.repo.isNotEmpty()) maven { url = uri(Kotlin.repo) }
         jcenter()
     }
-}
 
-task("clean") {
-    delete(rootProject.buildDir)
+    tasks.register("cleanProject") {
+        delete(project.buildDir)
+    }
 }

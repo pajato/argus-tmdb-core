@@ -1,3 +1,9 @@
+Version 0.0.11 (in progress)
+
++ Overhaul support for buildSrc versions eliminating cruft from the code (https://github/msink/libui) used as the model.
+
++ Add a clean target for the root project.
+
 Version 0.0.10 moves to a Gradle multi-project format, adopting the buildSrc concept.
 
 Version 0.0.9 handles parsing invalid JSON strings to a TmdbError object.
