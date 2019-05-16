@@ -3,14 +3,14 @@
 
 plugins {
    id("maven-publish")
-   id("apply plugin: 'signing")
+   signing
 }
 
-group = Publish.group
-version = Versions.argus
+group = Publish.GROUP
+version = Versions.ARGUS
 
 fun isReleaseBuild(): Boolean {
-   return !Versions.argus.contains("SNAPSHOT")
+   return !Versions.ARGUS.contains("SNAPSHOT")
 }
 
 val releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"

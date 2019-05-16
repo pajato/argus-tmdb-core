@@ -1,20 +1,18 @@
 object Publish {
-    const val group = "com.pajato.argus"
-    const val user = "pajato"
-    object pom {
-        const val url = "https://github.com/pajato/argus-tmdb-core"
-        const val description = "Kotlin Multiplatform Argus Core"
-        const val name = "argus-tmdb-core"
-        const val artifactId = name
-        const val scmUrl = "https://github.com/pajato/argus-tmdb-core"
-        const val scmConnection = "scm:git:https://github.com/pajato/argus-tmdb-core.git"
-        const val scmDevConnection = "scm:git:git@github.com:pajato/argus-tmdb-core.git"
-        const val licenseName = "The GNU Lesser General Public License, Version 3"
-        const val licenseUrl = "https://www.gnu.org/copyleft/lesser.html"
-        const val licenseDist = "repo"
-        const val developerId = "pajatopmr"
-        const val developerName = "Paul Michael Reilly"
-        const val developerOrg = "Pajato Technologies LLC"
-        const val developerUrl = "https://pajato.com/"
-    }
+    const val GROUP = "com.pajato.argus"
+    const val USER = "pajato"
+    const val POM_ARTIFACT_ID = "argus-tmdb-core"
+    const val POM_DESCRIPTION = "Kotlin Multiplatform Argus Core"
+    const val POM_DEVELOPER_ID = "pajatopmr"
+    const val POM_DEVELOPER_NAME = "Paul Michael Reilly"
+    const val POM_DEVELOPER_ORG = "Pajato Technologies LLC"
+    const val POM_DEVELOPER_URL = "https://pajato.com/"
+    const val POM_NAME = POM_ARTIFACT_ID
+    const val POM_LICENSE_DIST = "repo"
+    const val POM_LICENSE_NAME = "The GNU Lesser General Public License, Version 3"
+    const val POM_LICENSE_URL = "https://www.gnu.org/copyleft/lesser.html"
+    const val POM_SCM_CONNECTION = "scm:git:https://github.com/pajato/argus-tmdb-core.git"
+    const val POM_SCM_DEV_CONNECTION = "scm:git:git@github.com:pajato/argus-tmdb-core.git"
+    const val POM_SCM_URL = "https://github.com/pajato/argus-tmdb-core"
+    const val POM_URL = "https://github.com/pajato/argus-tmdb-core"
 }

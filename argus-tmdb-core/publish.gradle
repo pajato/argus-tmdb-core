@@ -4,11 +4,11 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-group = "${project.property("GROUP")}"
-version = "${project.property("VERSION_NAME")}"
+group = Publish.GROUP
+version = Versions.ARGUS_CORE
 
 def isReleaseBuild() {
-  return !VERSION_NAME.contains("SNAPSHOT")
+  return !version.contains("SNAPSHOT")
 }
 
 def getReleaseRepositoryUrl() {
@@ -30,10 +30,10 @@ def getRepositoryPassword() {
 }
 
 task emptySourcesJar(type: Jar) {
-  classifier = 'sources'
+  archiveClassifier.set("sources")
 }
 task emptyJavadocJar(type: Jar) {
-  classifier = 'javadoc'
+  archiveClassifier.set("javadoc")
 }
 
 publishing {
@@ -46,25 +46,25 @@ publishing {
       root.children().last() + {
         resolveStrategy = DELEGATE_FIRST
 
-        description POM_DESCRIPTION
-        name POM_NAME
-        url POM_URL
+        description Publish.POM_DESCRIPTION
+        name Publish.POM_NAME
+        url Publish.POM_URL
         licenses {
           license {
-            name POM_LICENCE_NAME
-            url POM_LICENCE_URL
-            distribution POM_LICENCE_DIST
+            name Publish.POM_LICENSE_NAME
+            url Publish.POM_LICENSE_URL
+            distribution Publish.POM_LICENSE_DIST
           }
         }
         scm {
-          url POM_SCM_URL
-          connection POM_SCM_CONNECTION
-          developerConnection POM_SCM_DEV_CONNECTION
+          url Publish.POM_SCM_URL
+          connection Publish.POM_SCM_CONNECTION
+          developerConnection Publish.POM_SCM_DEV_CONNECTION
         }
         developers {
           developer {
-            id POM_DEVELOPER_ID
-            name POM_DEVELOPER_NAME
+            id Publish.POM_DEVELOPER_ID
+            name Publish.POM_DEVELOPER_NAME
           }
         }
       }
