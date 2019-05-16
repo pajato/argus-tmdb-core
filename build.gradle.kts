@@ -1,8 +1,8 @@
 // SDPX-License-Identifier: LGPL-3.0
 
 plugins {
-    kotlin("multiplatform") version Versions.kotlin apply false
-    id("kotlinx-serialization") version Versions.kotlin apply false
+    kotlin("multiplatform") version Versions.KOTLIN apply false
+    id("kotlinx-serialization") version Versions.KOTLIN apply false
 }
 
 allprojects {
