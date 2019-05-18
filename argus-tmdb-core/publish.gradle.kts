@@ -7,10 +7,10 @@ plugins {
 }
 
 group = Publish.GROUP
-version = Versions.ARGUS
+version = Versions.ARGUS_CORE
 
 fun isReleaseBuild(): Boolean {
-   return !Versions.ARGUS.contains("SNAPSHOT")
+   return !Versions.ARGUS_CORE.contains("SNAPSHOT")
 }
 
 val releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
