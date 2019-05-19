@@ -1,9 +1,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+import groovy.util.Node
+
 plugins {
     kotlin("multiplatform")
     id("kotlinx-serialization")
     jacoco
+    id("maven-publish")
+    signing
 }
 
 kotlin {
@@ -55,4 +59,87 @@ tasks {
     }
 }
 
-apply(from = "publish.gradle")
+// Publishing code.
+
+// Notes:
+//
+// 1) This publishing code has been derived from snippets found on GitHub attributable to:
+// Keven Galligan (Stately project)
+// Jake Wharton and friend (SQLDelight project)
+// Russell Wolf (multiplatform-settings project)
+// Sergey Igushkin (k-new-mpp-samples project)
+// Mike Sinkovsky (libui project)
+//
+// 2) By all rights this code should be applied from a separate file, however, this is not possible due to suspected 
+// Gradle limitation with type-save model accessors.
+//
+// 3) Publishing is done to Maven Central since that allows for the artifacts to be found using either jcenter or Maven
+// Central.
+//
+// 4) It is the case that the Javadoc sources do not work properly. Empty Javadoc is provided to satisfy Maven Central
+// constraints.
+
+group = Publish.GROUP
+version = Versions.ARGUS_CORE
+
+val javadocJar by tasks.creating(Jar::class) { archiveClassifier.value("javadoc") }
+val sourcesJar by tasks.creating(Jar::class) { archiveClassifier.value("sources") }
+
+project.publishing.publications.withType<MavenPublication>().all {
+    fun customizeForMavenCentral(pom: org.gradle.api.publish.maven.MavenPom) = pom.withXml {
+        fun Node.add(key: String, value: String) { appendNode(key).setValue(value) }
+        fun Node.node(key: String, content: Node.() -> Unit) { appendNode(key).also(content) }
+        fun addToNode(node: Node) {
+            node.add("description", Publish.POM_DESCRIPTION)
+            node.add("name", Publish.POM_NAME)
+            node.add("url", Publish.POM_URL)
+        }
+        fun addOrganizationSubNode(node: Node) {
+            node.node("organization") {
+                add("name", Publish.POM_ORGANIZATION_NAME)
+                add("url", Publish.POM_ORGANIZATION_URL)
+            }
+        }
+        fun addIssuesSubNode(node: Node) {
+            node.node("issueManagement") {
+                add("system", "github")
+                add("url", "https://github.com/h0tk3y/k-new-mpp-samples/issues")
+            }
+        }
+        fun addLicensesSubNode(node: Node) {
+            node.node("licenses") {
+                node("license") {
+                    add("name", Publish.POM_LICENSE_NAME)
+                    add("url", Publish.POM_LICENSE_URL)
+                    add("distribution", Publish.POM_LICENSE_DIST)
+                }
+            }
+        }
+        fun addSCMSubNode(node: Node) {
+            node.node("scm") {
+                add("url", Publish.POM_SCM_URL)
+                add("connection", Publish.POM_SCM_CONNECTION)
+                add("developerConnection", Publish.POM_SCM_DEV_CONNECTION)
+            }
+        }
+        fun addDevelopersSubNode(node: Node) {
+            node.node("developers") {
+                node("developer") {
+                    add("name", Publish.POM_DEVELOPER_NAME)
+                }
+            }
+        }
+
+        asNode().run {
+            addToNode(this)
+            addOrganizationSubNode(this)
+            addIssuesSubNode(this)
+            addLicensesSubNode(this)
+            addSCMSubNode(this)
+        }
+    }
+
+    artifact(javadocJar)
+    customizeForMavenCentral(pom)
+    signing.sign(this@all)
+}

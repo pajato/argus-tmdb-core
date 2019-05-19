@@ -5,8 +5,8 @@ object Publish {
     const val POM_DESCRIPTION = "Kotlin Multiplatform Argus Core"
     const val POM_DEVELOPER_ID = "pajatopmr"
     const val POM_DEVELOPER_NAME = "Paul Michael Reilly"
-    const val POM_DEVELOPER_ORG = "Pajato Technologies LLC"
-    const val POM_DEVELOPER_URL = "https://pajato.com/"
+    const val POM_ORGANIZATION_NAME = "Pajato Technologies LLC"
+    const val POM_ORGANIZATION_URL = "https://pajato.com/"
     const val POM_NAME = POM_ARTIFACT_ID
     const val POM_LICENSE_DIST = "repo"
     const val POM_LICENSE_NAME = "The GNU Lesser General Public License, Version 3"
