@@ -1,4 +1,8 @@
-Version 0.0.11 (in progress)
+Version 0.0.12
+
++ Provide Kotlin DSL code for handling publications.
+
+Version 0.0.11
 
 + Overhaul support for buildSrc versions eliminating cruft from the code (https://github/msink/libui) used as the model.
 
