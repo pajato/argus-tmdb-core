@@ -1,9 +1,9 @@
-// SPDX-License-Identifier: LGPL-3.0
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 plugins {
     `kotlin-dsl`
 }
 
-repositories {
-    jcenter()
-}
+kotlinDslPluginOptions { experimentalWarning.set(false) }
+
+repositories { jcenter() }

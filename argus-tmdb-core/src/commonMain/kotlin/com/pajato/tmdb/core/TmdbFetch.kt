@@ -65,6 +65,6 @@ fun KClass<out TmdbData>.getListName(): String {
     return createDefaultFromType(name).getListName()
 }
 
-/** Parse the string receiver returning the TmdbError wrapped string on a parsing error. */
+/** Parse the string receiver returning the parsed TmdbData or a TmdbError wrapped message on a parsing error. */
 internal fun <T : TmdbData> String.parse(deserializer: DeserializationStrategy<T>): TmdbData =
-        try { Json.parse(deserializer, this) } catch (exc: JsonException) { TmdbError(this) }
+    try { Json.parse(deserializer, this) } catch (exc: Exception) { TmdbError(this) }

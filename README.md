@@ -8,6 +8,10 @@ A multi-platform Kotlin library providing access to The Movie Database (tmdb) da
 
 Support will be provided in the first release for Android and iOS.
 
+## Current release: (Maven Central)
+
+com.pajato.argus:argus-tmdb-core:0.0.13
+
 ## API
 
 ```kotlin

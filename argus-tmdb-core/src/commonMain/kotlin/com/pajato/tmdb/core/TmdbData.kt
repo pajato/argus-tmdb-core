@@ -12,11 +12,7 @@ interface TmdbDataFactory {
 }
 
 /** The set of collections used in TMDB. */
-@Serializable
-data class Collection(
-    val id: Int = 0,
-    val name: String = ""
-) : TmdbData() {
+@Serializable data class Collection(val id: Int = 0, val name: String = "") : TmdbData() {
     companion object : TmdbDataFactory {
         override val listName = "collection_ids"
         override fun create(json: String): TmdbData = createFromJson(json, Collection())

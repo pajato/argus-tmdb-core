@@ -1,3 +1,9 @@
+Version 0.0.13
+
++ Restore some dropped functionality for managing release vs snapshot deployment.
+
++ Improved error handling for malformed JSON.
+
 Version 0.0.12
 
 + Provide Kotlin DSL code for handling publications.
