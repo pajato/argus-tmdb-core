@@ -48,6 +48,7 @@ tasks {
         additionalSourceDirs.setFrom(files(coverageSourceDirs))
         sourceDirectories.setFrom(files(coverageSourceDirs))
         executionData.setFrom(files("$buildDir/jacoco/jvmTest.exec"))
+        @Suppress("UnstableApiUsage")
         reports {
             html.isEnabled = true
             xml.isEnabled = true
@@ -65,12 +66,12 @@ tasks {
 //
 // 1) This publishing code has been derived from snippets found on GitHub attributable to:
 // Keven Galligan (Stately project)
-// Jake Wharton and friend (SQLDelight project)
+// Jake Wharton and Alec Strong (SQLDelight project)
 // Russell Wolf (multiplatform-settings project)
 // Sergey Igushkin (k-new-mpp-samples project)
 // Mike Sinkovsky (libui project)
 //
-// 2) By all rights this code should be applied from a separate file, however, this is not possible due to suspected 
+// 2) By all rights this code should be applied from a separate file, however, this is not possible due to a short term
 // Gradle limitation with type-save model accessors.
 //
 // 3) Publishing is done to Maven Central since that allows for the artifacts to be found using either jcenter or Maven
@@ -82,25 +83,13 @@ tasks {
 group = Publish.GROUP
 version = Versions.ARGUS_CORE
 
+val releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+val snapshotRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 val javadocJar by tasks.creating(Jar::class) { archiveClassifier.value("javadoc") }
 val sourcesJar by tasks.creating(Jar::class) { archiveClassifier.value("sources") }
 
 publishing {
     publications.withType<MavenPublication>().all {
-        repositories {
-            maven {
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-                credentials {
-                    username = "${project.property("SONATYPE_NEXUS_USERNAME")}"
-                    password = "${project.property("SONATYPE_NEXUS_PASSWORD")}"
-                }
-                /* maven {
-                    name = "test"
-                    url = uri("file://${rootProject.project(Publish.POM_ARTIFACT_ID).buildDir}/arguslocalMaven")
-                } */
-            }
-        }
-        
         fun customizeForMavenCentral(pom: org.gradle.api.publish.maven.MavenPom) = pom.withXml {
             fun Node.add(key: String, value: String) { appendNode(key).setValue(value) }
             fun Node.node(key: String, content: Node.() -> Unit) { appendNode(key).also(content) }
@@ -155,9 +144,22 @@ publishing {
                 addDevelopersSubNode(this)
             }
         }
+        fun isReleaseBuild(): Boolean = !Versions.ARGUS_CORE.endsWith("-SNAPSHOT")
+        fun getRepositoryUrl(): String = if (isReleaseBuild()) releaseRepositoryUrl else snapshotRepositoryUrl
 
         artifact(javadocJar)
         customizeForMavenCentral(pom)
-        signing.sign(this@all)
+        @Suppress("UnstableApiUsage")
+        if (isReleaseBuild()) signing.sign(this@all)
+
+        repositories {
+            maven {
+                url = uri(getRepositoryUrl())
+                credentials {
+                    username = "${project.property("SONATYPE_NEXUS_USERNAME")}"
+                    password = "${project.property("SONATYPE_NEXUS_PASSWORD")}"
+                }
+            }
+        }
     }
 }

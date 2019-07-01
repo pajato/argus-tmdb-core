@@ -1,4 +1,4 @@
-// SDPX-License-Identifier: LGPL-3.0
+// SDPX-License-Identifier: LGPL-3.0-or-later
 
 plugins {
     kotlin("multiplatform") version Versions.KOTLIN apply false
