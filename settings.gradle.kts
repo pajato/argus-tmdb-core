@@ -19,6 +19,6 @@ pluginManagement {
 
 rootProject.name = "argus-tmdb-core"
 
-include(":argus-tmdb-core")
+include("library")
 
 enableFeaturePreview("GRADLE_METADATA")

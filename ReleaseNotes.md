@@ -1,3 +1,11 @@
+Version 0.0.14
+
++ Adopt 'library' construct.
+
++ Normalize the .gitignore files to allow the wrapper jar file to be preserved.
+
++ Upgrade to use Kotlin 1.3.41
+
 Version 0.0.13
 
 + Restore some dropped functionality for managing release vs snapshot deployment.
