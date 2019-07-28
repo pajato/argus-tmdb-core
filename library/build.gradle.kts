@@ -36,7 +36,7 @@ kotlin {
 }
 
 jacoco {
-    toolVersion = "0.8.3"
+    toolVersion = "0.8.4"
 }
 
 tasks {
@@ -147,6 +147,7 @@ publishing {
         fun isReleaseBuild(): Boolean = !Versions.ARGUS_CORE.endsWith("-SNAPSHOT")
         fun getRepositoryUrl(): String = if (isReleaseBuild()) releaseRepositoryUrl else snapshotRepositoryUrl
 
+        artifactId = artifactId.replace(project.name, rootProject.name)
         artifact(javadocJar)
         customizeForMavenCentral(pom)
         @Suppress("UnstableApiUsage")
